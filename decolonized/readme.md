@@ -1,10 +1,10 @@
-TO USE THIS PROJECT:
+# Usage
 
 Download the directory of this app into an IDE of some sort. Then, open the IDE and navigate to the project's directory (/decolonized) In the terminal, export a personal API key that you can use
 to run Flask. From there, simply type "flask run" and click the link that is outputted in the "Running on..." line. That will take you to the home page of my project. All other links and such are
 accessible from there.
 
-TO TEST THIS PROJECT:
+# Functionality
 
 The entire web project only has two main pages: the homepage (which you will be taken to when you click the aforementioned link from "flask run"), and the histories page. The home page simply
 describes the function and goal of this project (no user-interactivity component); the histories page allows users to click on an interactive timeline and thus explore the history of decolonization
