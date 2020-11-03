@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+ <!-- Layout HTML file from which all other files are modeled. -->
+
+<html lang="en">
+
+    <head>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="/static/styles.css" rel="stylesheet">
+
+        {% block head %}{% endblock %}
+
+        <title>DE-Colonized: {% block title %}{% endblock %}</title>
+
+    </head>
+
+    <body>
+    <!-- Navigation bar at top of every page. -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/"><img id="logo" src="/static/logo.png" width=70% height=50% alt="Logo"></a>
+
+
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/year">Histories</a>
+            </li>
+        </ul>
+    </div>
+    </nav>
+        <main class="container p-5">
+            {% block main %}{% endblock %}
+        </main>
+
+        <!-- Footer going on all pages with credits and author attribution. -->
+        <footer class="small text-center text-muted">
+            Data provided for free by <a href="https://en.wikipedia.org">Wikipedia</a>; view <a href="https://en.wikipedia.org/wiki/Decolonization#Timeline_of_independence">page</a>.
+            <br> Created by Nikhil Dharmaraj.
+            <br> Thanks to TomTom, LocationIQ, and Bootstrap.
+        </footer>
+
+    </body>
+
+</html>

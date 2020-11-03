@@ -1,0 +1,25 @@
+<!-- Intro/home/landing page. -->
+
+{% extends "layout.html" %}
+
+
+
+{% block title %}
+     Intro
+{% endblock %}
+
+{% block main %}
+
+    <!-- Informational jumbotron: essentially the only feature on this page. It states the project title, describes its goals, and includes a picture to help the user understand the inspiration. -->
+    <div class="jumbotron">
+        <h1 class="display-4">DE-Colonized: The Stories That Matter</h1>
+        <hr class="my-4">
+        <p class="navig lead">In the last three hundred years, the world has changed drastically, perhaps most notably from a world of colonial holdings to a world of independent nations.
+        This transformation was not simple or straightforward, but gradual and complex. So often, colonization is taught and discussed in a way that solely highlights the deeds, battles, and
+        events of the Western powers. And, thus, the stories, the people, the fighters behind the incredible de-colonization movements, are too often overlooked in this conversation. <br> <br>
+        This project aims to shed light on the stories that matter in the complex phenomenon that was the decolonization of the world: told not from the perspective of the colonizers, but
+        from that of the revolutionaries. </p>
+        <img id="quote" src="static/quote.png" alt="Quote by Nelson Mandela">
+    </div>
+
+{% endblock %}

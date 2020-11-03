@@ -1,0 +1,113 @@
+<!-- Histories/map/timeline page. -->
+
+{% extends "layout.html" %}
+
+{% block head %}
+    <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.37.2/maps/maps.css'/>
+    <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.37.2/maps/maps-web.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block title %}
+     Histories
+{% endblock %}
+
+{% block main %}
+    <!-- One-sentence jumbotron describing how to use the Histories page. -->
+     <div id="histjumbo" class="jumbotron">
+        <p class="navig lead">Select a year from the timeline slider to learn about the world's decolonization movements at that time. </h1>
+    </div>
+
+    <!-- Map element. -->
+    <div id='map'></div>
+
+    <!-- Line divider. -->
+    <hr class="my-4">
+
+    <!-- Range slider, wrapped in a container. -->
+    <div class="slidecontainer">
+        <input type="range" min="1" max={{years|length}} value="0" class="slider" id="timeline">
+        <p id="year">~~</p>
+    </div>
+
+    <script>
+        //Instatiating the TomTom map
+        var map = tt.map({
+            container: 'map',
+            key: 'OAuSiCi2ojdIOFrsadKfUeBODOzTfGYk',
+            style: 'tomtom://vector/1/basic-main'
+        });
+
+        //Callback for onchange of the timeline: changes the value of the <p> element below and starts dropping appropriate pins
+        document.querySelector('.slidecontainer').onchange = function() {
+            var values = [];
+            {% for year in years %}
+                values.push({{year}});
+            {% endfor %}
+            var year = values[document.querySelector('.slider').value - 1]; //Year chosen by user.
+            document.querySelector('#year').innerHTML = year //Changes value of <p> element below timeline to reflect year chosen.
+
+            var info = {{info | tojson}}; //Converting Jinja parameter info to JS list.
+
+            var yearEvents = [];
+            for(i = 0; i < info.length; i++)
+            {
+                if(info[i]['Year'] == year){
+                    yearEvents.push(info[i]);
+                }
+            } //Creating a sub-list of just the events that happened at the selected year
+
+            (function theLoop (i) {
+                var event = yearEvents[i];
+                var colonizer = event['Colonizer'];
+                var desc = event['Event'];
+                var dec = event['Decolonized state'].replace(/ *\([^)]*\) */g, "");
+                setTimeout(function () {
+                    lookupAndDrop(colonizer, desc, dec, year); //What I want to do each loop: lookup the country for the event at hand and drop a pin.
+                    if (--i >= 0) //decreasing counter variable
+                    {
+                      theLoop(i);
+                    }
+                }, 1000);
+                })(yearEvents.length - 1); //This is the method of implementing a for loop with delay after each iteration, learned from https://scottiestech.info/2014/07/01/javascript-fun-looping-with-a-delay/.
+        }
+
+        //Function to lookup a certain country, given by dec (decolonized state) and drop a pin/popup on that location: popup containing information from other parameters.
+        function lookupAndDrop(colonizer, desc, dec, year) {
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://us1.locationiq.com/v1/search.php?key=6c679c3118300c&q=" + dec + "&format=json",
+              "method": "GET"
+            } //Lookup coordinates of a place from LocationIQ API
+
+            $.ajax(settings).done(function (response) {
+              var lat = parseFloat(response[0]["lat"]); //Latitude of first response
+              var long = parseFloat(response[0]["lon"]); //Longitude of first response
+              mapDrop([long, lat], colonizer, desc, dec, year); //Drop a marker/popup at that lat/long, with information from parameters.
+            });
+        }
+
+        //Function to drop popup/marker at a given spot (coords), with all other information from parameters.
+        function mapDrop(coords, colonizer, desc, dec, year) {
+            var element = document.createElement('div');
+            element.id = 'marker';
+            var marker = new tt.Marker({element: element}).setLngLat(coords).addTo(map); //Creating custom marker
+
+            var popupOffsets = {
+              top: [0, 0],
+              bottom: [0, -70],
+              'bottom-right': [0, -70],
+              'bottom-left': [0, -70],
+              left: [25, -35],
+              right: [-25, -35]
+            } //Standard popup offsets, taken from TomTom tutorials.
+
+            //Custom Popup with line breaks and bolded text, with info from parameters plugged in
+            var customPopup = "<b>DECOLONIZED STATE:</b> " + dec + "<br/> <b>COLONIZER:</b> " + colonizer + "<br/> <b>EVENT: </b>" + desc + "<br/> <b>YEAR: </b>" + year;
+            var popup = new tt.Popup({offset: popupOffsets}).setHTML(customPopup);
+            marker.setPopup(popup).togglePopup(); //Displaying popup to user
+        }
+
+    </script>
+{% endblock %}
