@@ -1,3 +1,7 @@
+# Context
+
+DE-Colonized is my final project for CS50, submitted Fall 2020.
+
 # Usage
 
 Download the directory of this app into an IDE of some sort. Then, open the IDE and navigate to the project's directory (/decolonized) In the terminal, export a personal API key that you can use
